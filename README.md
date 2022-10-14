@@ -1,7 +1,7 @@
 # Prerequisites 
 1. Google storage buckets created 
    * The `source_bucket` - to store source files 
-   * The `dataflow_temp_files` - technical bucket to store tmp files
+   * The `dataflow_temp_files` - technical bucket to store temp files
 2. Service account with the following roles: 
     * BigQuery Admin
     * BigQuery Job User
@@ -12,18 +12,18 @@
     * Dataflow Worker
     * Service Account User
     * Storage Admin
-3. Creat a folder `secret` and save a service key.json to that folder
+3. Create a folder `secret` and save a service key.json to that folder
 4. Generate dummy data with `dummy_file_generator.py` and copy files to the `source_bucket`
 
 ## How to run the beam job locally
-1. Open terminal
-2. Create a virtual environment with python 3.7 and install required packages from `df_requirements.txt`
+1. Open a terminal
+2. Create a virtual environment with python 3.7 and install the required packages from `df_requirements.txt`
    * `virtualenv -p python3.7 venv`
    * activate venv `source venv/bin/activate`
 3. Set GOOGLE_APPLICATION_CREDENTIALS env variable
    * `export GOOGLE_APPLICATION_CREDENTIALS=<path to the service account key .json>`
 4. Create dataset `saves_dev`
-5. To start execution run the following command:
+5. To start execution, run the following command:
 ```bash
 python dags/beam_jobs/sales_ingest_df_job.py \
 --runner=DirectRunner \
@@ -33,10 +33,10 @@ python dags/beam_jobs/sales_ingest_df_job.py \
 --temp_location=<dataflow_temp_files>/df 
 ```
 The result of the execution should be two tables in tables created `raw` and `transaction_summary` 
-with data from thr files
+with data from the files
 
-## How to run deploy the beam job to the GCP Dataflow
-1) The same steps as run locally but the last one, the command should be as following:
+## How to deploy the beam job to the GCP Dataflow
+1) The same steps as run locally, but the last one, the command should be as follows:
 ```bash
 python dags/beam_jobs/sales_ingest_df_job.py \
     --runner=DataflowRunner \
@@ -54,16 +54,16 @@ python dags/beam_jobs/sales_ingest_df_job.py \
     --service_account_email=<service account email>
 ```
 
-2) Navigate to `Google cloud console -> Dataflow -> Jobs` to see running job with name specified in the command.
+2) Navigate to `Google cloud console -> Dataflow -> Jobs` to see running job with the name specified in the command.
 The execution time should be about 7 min.
 
-## Airflow setup with docker compose
+## Airflow setup with docker-compose
 1) Crete required folders: 
 ```
 mkdir -p ./logs ./plugins
 echo -e "AIRFLOW_UID=$(id -u)" > .env
 ```
-2) Edd the wfilliwing env variables:
+2) Edd the following env variables:
 ```bash
 GOOGLE_CLOUD_PROJECT: <project id>
 SERVICE_ACCOUNT: <service account email>
@@ -73,7 +73,7 @@ LOCATION: 'europe-west1'
 ```
 3) Build docker image with airflow: `docker build --progress=plain -t airflow-2.3.3-custom:latest --no-cache .`
 4) Init airflow `docker-compose up airflow-init`
-5) Run docker compose `docker-compose up -d`
+5) Run docker-compose `docker-compose up -d`
 6) Open in browser `http://localhost:8080/` username and password `airflow`
 7) On Airflow Ui navigate to Admin -> UI > Connections Set Connection Id `google_cloud_default` and Connection Type Google Cloud
 8) Navigate to DAG tab, search dag by tag `sales-data`
@@ -81,7 +81,7 @@ LOCATION: 'europe-west1'
 
 ## Cloud Composer
 1) Run the composer instance with the following attributes:
-   * Use the service account with required permissions 
+   * Use the service account with the required permissions 
    * Specify all env variables as in docker compose
 2) Copy the `load_sales_data.py` and `beam_jobs` to the composer DAG folder
 3) Navigate to Airflow UI and run the dag
