@@ -1,8 +1,0 @@
-setup.py
-beam_utils.egg-info/PKG-INFO
-beam_utils.egg-info/SOURCES.txt
-beam_utils.egg-info/dependency_links.txt
-beam_utils.egg-info/requires.txt
-beam_utils.egg-info/top_level.txt
-bq_schemas/__init__.py
-bq_schemas/sales.py
